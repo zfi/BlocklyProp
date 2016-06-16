@@ -64,14 +64,12 @@
                 <li class="dropdown">
                     <c:if test="${!param.demo}">
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown"><fmt:message key="editor.run.title" /> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
+                        <ul class="dropdown-menu" id="client-actions" data-client="<url:getUrl url="/rest/client/list" />" >
                             <li><a href="#" onclick="compile()"><fmt:message key="editor.run.compile" /></a></li>
                             <li><a href="#" onclick="loadIntoRam()"><fmt:message key="editor.run.ram" /></a></li>
                             <li><a href="#" onclick="loadIntoEeprom()"><fmt:message key="editor.run.eeprom" /></a></li>
                             <li class="divider"></li>
                             <li><a href="#" onclick="serial_console()"><fmt:message key="editor.run.terminal" /></a></li>
-                            <li class="divider"></li>
-                            <li><a href="#" onclick="configure_client()"><fmt:message key="editor.run.configure" /></a></li>
                         </ul>
                     </c:if>
                     <c:if test="${param.demo}">

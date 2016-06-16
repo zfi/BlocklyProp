@@ -37,7 +37,6 @@ $(document).ready(function () {
 });
 
 showInfo = function (data) {
-    console.log(data);
     $(".project-name").text(data['name']);
     if (!data['yours']) {
         $(".project-owner").text("(" + data['user'] + ")");
