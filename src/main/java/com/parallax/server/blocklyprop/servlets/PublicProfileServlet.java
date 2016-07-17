@@ -11,6 +11,7 @@ import com.google.inject.Singleton;
 import com.parallax.client.cloudsession.CloudSessionUserService;
 import com.parallax.client.cloudsession.exceptions.ServerException;
 import com.parallax.client.cloudsession.exceptions.UnknownUserIdException;
+import com.parallax.server.blocklyprop.db.dao.FriendsDao;
 import com.parallax.server.blocklyprop.db.generated.tables.pojos.User;
 import com.parallax.server.blocklyprop.services.UserService;
 import com.parallax.server.blocklyprop.services.impl.SecurityServiceImpl;
@@ -33,8 +34,14 @@ public class PublicProfileServlet extends HttpServlet {
 
     private static final Logger log = LoggerFactory.getLogger(PublicProfileServlet.class);
 
+    private FriendsDao friendsDao;
     private UserService userService;
     private CloudSessionUserService cloudSessionUserService;
+
+    @Inject
+    public void setFriendsDao(FriendsDao friendsDao) {
+        this.friendsDao = friendsDao;
+    }
 
     @Inject
     public void setUserService(UserService userService) {
@@ -77,7 +84,23 @@ public class PublicProfileServlet extends HttpServlet {
             log.info("Get public profile for user {}: Cloud-session user: {}", idUser, user.getIdcloudsession());
             com.parallax.client.cloudsession.objects.User cloudSessionUser = cloudSessionUserService.getUser(user.getIdcloudsession());
 
+            boolean you = false;
+
+            if (SecurityUtils.getSubject().isAuthenticated()) {
+                you = SecurityServiceImpl.getSessionData().getIdUser().equals(user.getId());
+                if (you) {
+                    // TODO get friend requests where you are the one that is invited
+                    // TODO get friend requests where you are the one that did the invite
+                    req.setAttribute("openFriendRequests", friendsDao.getOpenFriendRequests());
+                    req.setAttribute("refusedFriendRequests", friendsDao.getRefusedFriendRequests());
+                    req.setAttribute("friendRequestsYouHaventAccepted", friendsDao.getFriendRequestsYouHaventAccepted());
+                    req.setAttribute("friendRequestsYouRefused", friendsDao.getFriendRequestsYouRefused());
+                }
+            }
+
             req.setAttribute("screenname", cloudSessionUser.getScreenname());
+            req.setAttribute("you", you);
+
             req.getRequestDispatcher("/WEB-INF/servlet/public-profile.jsp").forward(req, resp);
         } catch (UnknownUserIdException ex) {
             log.info("User not known in cloud-session");

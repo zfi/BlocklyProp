@@ -4,6 +4,8 @@
     Author     : Michel
 --%>
 
+<%@page import="java.util.List"%>
+<%@page import="com.parallax.server.blocklyprop.db.generated.tables.records.FriendRequestRecord"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ include file="/WEB-INF/includes/include.jsp"%>
 
@@ -22,10 +24,26 @@
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#profile"><fmt:message key="public-profile.nav.profile" /></a></li>
                             <li role="presentation"><a data-toggle="tab" href="#projects"><fmt:message key="public-profile.nav.projects" /></a></li>
+
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="profile">
-                                <h3><fmt:message key="public-profile.friends" /></h3>
+                                <h3><fmt:message key="public-profile.friends" />
+                                    <shiro:authenticated>
+                                        <% if (!(boolean) request.getAttribute("you")) { %>
+                                        <a href="#" class="btn btn-default">Invite</a>
+                                        <% }%>
+                                    </shiro:authenticated>
+                                </h3>
+                                <%
+                                    if ((boolean) request.getAttribute("you")) {
+                                        List<FriendRequestRecord> friendRequests = (List<FriendRequestRecord>) request.getAttribute("friendRequestsYouHaventAccepted");
+                                        if (friendRequests != null && !friendRequests.isEmpty()) { %>
+                                <h4>Open invitations</h4>
+                                <%
+                                        }
+                                    }
+                                %>
                             </div>
                             <div role="tabpanel" class="tab-pane" id="projects">
                                 <h3><fmt:message key="public-profile.projects" /></h3>

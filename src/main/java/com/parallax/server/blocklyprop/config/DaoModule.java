@@ -6,9 +6,11 @@
 package com.parallax.server.blocklyprop.config;
 
 import com.google.inject.AbstractModule;
+import com.parallax.server.blocklyprop.db.dao.FriendsDao;
 import com.parallax.server.blocklyprop.db.dao.ProjectDao;
 import com.parallax.server.blocklyprop.db.dao.SessionDao;
 import com.parallax.server.blocklyprop.db.dao.UserDao;
+import com.parallax.server.blocklyprop.db.dao.impl.FriendsDaoImpl;
 import com.parallax.server.blocklyprop.db.dao.impl.ProjectDaoImpl;
 import com.parallax.server.blocklyprop.db.dao.impl.SessionDaoImpl;
 import com.parallax.server.blocklyprop.db.dao.impl.UserDaoImpl;
@@ -24,6 +26,7 @@ public class DaoModule extends AbstractModule {
         bind(ProjectDao.class).to(ProjectDaoImpl.class);//.asEagerSingleton();
         bind(UserDao.class).to(UserDaoImpl.class);
         bind(SessionDao.class).to(SessionDaoImpl.class);
+        bind(FriendsDao.class).to(FriendsDaoImpl.class);
     }
 
 }
