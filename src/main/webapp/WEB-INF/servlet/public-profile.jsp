@@ -23,8 +23,12 @@
                     <div>
                         <ul class="nav nav-pills" role="tablist">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#profile"><fmt:message key="public-profile.nav.profile" /></a></li>
+                                <shiro:authenticated>
+                                    <% if ((boolean) request.getAttribute("you")) { %>
+                                <li role="presentation" class="active"><a data-toggle="tab" href="#profile"><fmt:message key="public-profile.nav.profile.other-friends" /></a></li>
+                                    <% }%>
+                                </shiro:authenticated>
                             <li role="presentation"><a data-toggle="tab" href="#projects"><fmt:message key="public-profile.nav.projects" /></a></li>
-
                         </ul>
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="profile">
@@ -35,16 +39,15 @@
                                         <% }%>
                                     </shiro:authenticated>
                                 </h3>
-                                <%
-                                    if ((boolean) request.getAttribute("you")) {
-                                        List<FriendRequestRecord> friendRequests = (List<FriendRequestRecord>) request.getAttribute("friendRequestsYouHaventAccepted");
-                                        if (friendRequests != null && !friendRequests.isEmpty()) { %>
-                                <h4>Open invitations</h4>
-                                <%
-                                        }
-                                    }
-                                %>
+
                             </div>
+                            <shiro:authenticated>
+                                <% if ((boolean) request.getAttribute("you")) { %>
+                                <div role="tabpanel" class="tab-pane" id="projects">
+                                    <h3><fmt:message key="public-profile.friends.other" /></h3>
+                                </div>
+                                <% }%>
+                            </shiro:authenticated>
                             <div role="tabpanel" class="tab-pane" id="projects">
                                 <h3><fmt:message key="public-profile.projects" /></h3>
                             </div>
