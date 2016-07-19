@@ -58,6 +58,7 @@ public class Keys {
 	public static final Identity<FriendRequestRecord, Long> IDENTITY_FRIEND_REQUEST = Identities0.IDENTITY_FRIEND_REQUEST;
 	public static final Identity<FriendRequestEmailRecord, Long> IDENTITY_FRIEND_REQUEST_EMAIL = Identities0.IDENTITY_FRIEND_REQUEST_EMAIL;
 	public static final Identity<ProjectRecord, Long> IDENTITY_PROJECT = Identities0.IDENTITY_PROJECT;
+	public static final Identity<ProjectSharingRecord, Long> IDENTITY_PROJECT_SHARING = Identities0.IDENTITY_PROJECT_SHARING;
 	public static final Identity<SecRoleRecord, Long> IDENTITY_SEC_ROLE = Identities0.IDENTITY_SEC_ROLE;
 	public static final Identity<TagRecord, Long> IDENTITY_TAG = Identities0.IDENTITY_TAG;
 	public static final Identity<UserRecord, Long> IDENTITY_USER = Identities0.IDENTITY_USER;
@@ -107,6 +108,7 @@ public class Keys {
 		public static Identity<FriendRequestRecord, Long> IDENTITY_FRIEND_REQUEST = createIdentity(FriendRequest.FRIEND_REQUEST, FriendRequest.FRIEND_REQUEST.ID);
 		public static Identity<FriendRequestEmailRecord, Long> IDENTITY_FRIEND_REQUEST_EMAIL = createIdentity(FriendRequestEmail.FRIEND_REQUEST_EMAIL, FriendRequestEmail.FRIEND_REQUEST_EMAIL.ID);
 		public static Identity<ProjectRecord, Long> IDENTITY_PROJECT = createIdentity(Project.PROJECT, Project.PROJECT.ID);
+		public static Identity<ProjectSharingRecord, Long> IDENTITY_PROJECT_SHARING = createIdentity(ProjectSharing.PROJECT_SHARING, ProjectSharing.PROJECT_SHARING.ID);
 		public static Identity<SecRoleRecord, Long> IDENTITY_SEC_ROLE = createIdentity(SecRole.SEC_ROLE, SecRole.SEC_ROLE.ID);
 		public static Identity<TagRecord, Long> IDENTITY_TAG = createIdentity(Tag.TAG, Tag.TAG.ID);
 		public static Identity<UserRecord, Long> IDENTITY_USER = createIdentity(User.USER, User.USER.ID);
