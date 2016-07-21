@@ -100,6 +100,7 @@ public class PublicProfileServlet extends HttpServlet {
 
             req.setAttribute("screenname", cloudSessionUser.getScreenname());
             req.setAttribute("you", you);
+            req.setAttribute("idUser", user.getId());
 
             req.getRequestDispatcher("/WEB-INF/servlet/public-profile.jsp").forward(req, resp);
         } catch (UnknownUserIdException ex) {

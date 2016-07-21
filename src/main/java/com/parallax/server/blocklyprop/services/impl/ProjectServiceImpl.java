@@ -75,6 +75,11 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
+    public List<ProjectRecord> getUserSharedProjects(Long idUser, boolean includeForFriends, TableSort sort, TableOrder order, Integer limit, Integer offset) {
+        return projectDao.getSharedUserProjects(idUser, includeForFriends, sort, order, limit, offset);
+    }
+
+    @Override
     public List<ProjectRecord> getSharedProjects(TableSort sort, TableOrder order, Integer limit, Integer offset) {
         return projectDao.getSharedProjects(sort, order, limit, offset, BlocklyPropSecurityUtils.getCurrentUserId());
     }
@@ -87,6 +92,11 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public int countSharedProjects() {
         return projectDao.countSharedProjects(BlocklyPropSecurityUtils.getCurrentUserId());
+    }
+
+    @Override
+    public int countUserSharedProjects(Long idUser, boolean isFriend) {
+        return projectDao.countUserSharedProjects(idUser, isFriend);
     }
 
     @Override

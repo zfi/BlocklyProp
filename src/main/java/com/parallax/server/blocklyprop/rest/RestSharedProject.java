@@ -50,6 +50,30 @@ public class RestSharedProject {
     }
 
     @GET
+    @Path("/userlist/{idUser}")
+    @Detail("Get all shared projects")
+    @Name("Get all shared projects")
+    @Produces("application/json")
+    public Response getUserList(@PathParam("idUser") Long idUser, @QueryParam("sort") TableSort sort, @QueryParam("order") TableOrder order, @QueryParam("limit") Integer limit, @QueryParam("offset") Integer offset) {
+        boolean isFriend = false;
+
+        System.out.println("idUser: " + idUser);
+        List<ProjectRecord> projects = projectService.getUserSharedProjects(idUser, isFriend, sort, order, limit, offset);
+        int projectCount = projectService.countUserSharedProjects(idUser, isFriend);
+
+        JsonObject result = new JsonObject();
+        JsonArray jsonProjects = new JsonArray();
+        for (ProjectRecord project : projects) {
+            jsonProjects.add(projectConverter.toListJson(project));
+        }
+
+        result.add("rows", jsonProjects);
+        result.addProperty("total", projectCount);
+
+        return Response.ok(result.toString()).build();
+    }
+
+    @GET
     @Path("/list")
     @Detail("Get all shared projects")
     @Name("Get all shared projects")

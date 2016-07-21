@@ -33,6 +33,8 @@ public interface ProjectDao {
 
     List<ProjectRecord> getSharedProjects(TableSort sort, TableOrder order, Integer limit, Integer offset, Long idUser);
 
+    List<ProjectRecord> getSharedUserProjects(Long idUser, boolean includeForFriends, TableSort sort, TableOrder order, Integer limit, Integer offset);
+
     int countUserProjects(Long idUser);
 
     int countSharedProjects(Long idUser);
@@ -42,5 +44,7 @@ public interface ProjectDao {
     boolean deleteProject(Long idProject);
 
     ProjectRecord updateProjectCode(Long idProject, String code);
+
+    public int countUserSharedProjects(Long idUser, boolean friend);
 
 }

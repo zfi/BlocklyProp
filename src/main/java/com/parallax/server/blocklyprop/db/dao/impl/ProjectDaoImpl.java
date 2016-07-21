@@ -18,6 +18,7 @@ import java.util.List;
 import org.apache.shiro.authz.UnauthorizedException;
 import org.jooq.Condition;
 import org.jooq.DSLContext;
+import org.jooq.SelectConditionStep;
 import org.jooq.SortField;
 
 /**
@@ -134,6 +135,24 @@ public class ProjectDaoImpl implements ProjectDao {
     }
 
     @Override
+    public List<ProjectRecord> getSharedUserProjects(Long idUser, boolean includeForFriends, TableSort sort, TableOrder order, Integer limit, Integer offset) {
+        SortField<?> orderField = sort == null ? Tables.PROJECT.NAME.asc() : sort.getField().asc();
+        if (TableOrder.desc == order) {
+            orderField = sort == null ? Tables.PROJECT.NAME.desc() : sort.getField().desc();
+        }
+        Condition conditions = Tables.PROJECT.SHARED.eq(Boolean.TRUE);
+        if (includeForFriends) {
+            conditions.or(Tables.PROJECT.SHARED.isNull());
+        }
+
+        SelectConditionStep query = create.selectFrom(Tables.PROJECT).where(conditions);
+        if (idUser != null) {
+            query = query.and(Tables.PROJECT.ID_USER.eq(idUser));
+        }
+        return query.orderBy(orderField).limit(limit).offset(offset).fetch();
+    }
+
+    @Override
     public int countUserProjects(Long idUser) {
         return create.fetchCount(Tables.PROJECT, Tables.PROJECT.ID_USER.equal(idUser));
     }
@@ -143,6 +162,19 @@ public class ProjectDaoImpl implements ProjectDao {
         Condition conditions = Tables.PROJECT.SHARED.equal(Boolean.TRUE);
         if (idUser != null) {
             conditions = conditions.or(Tables.PROJECT.ID_USER.eq(idUser));
+        }
+        return create.fetchCount(Tables.PROJECT, conditions);
+    }
+
+    @Override
+    public int countUserSharedProjects(Long idUser, boolean includeForFriends) {
+        Condition conditions = Tables.PROJECT.SHARED.eq(Boolean.TRUE);
+        if (includeForFriends) {
+            conditions.or(Tables.PROJECT.SHARED.isNull());
+        }
+
+        if (idUser != null) {
+            conditions = conditions.and(Tables.PROJECT.ID_USER.eq(idUser));
         }
         return create.fetchCount(Tables.PROJECT, conditions);
     }
