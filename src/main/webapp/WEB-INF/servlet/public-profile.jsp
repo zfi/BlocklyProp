@@ -28,7 +28,7 @@
                 <div class="col-md-12 col-sm-12">
                     <h2><fmt:message key="public-profile.title" />: <span class="user"><%= request.getAttribute("screenname")%></span></h2>
                     <div>
-                        <ul class="nav nav-pills" role="tablist">
+                        <ul class="nav nav-tabs" role="tablist">
                             <li role="presentation" class="active"><a data-toggle="tab" href="#profile"><fmt:message key="public-profile.nav.profile" /></a></li>
                                 <shiro:authenticated>
                                     <% if ((boolean) request.getAttribute("you")) { %>
