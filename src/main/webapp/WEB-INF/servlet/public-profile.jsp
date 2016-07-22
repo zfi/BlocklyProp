@@ -32,7 +32,7 @@
                             <li role="presentation" class="active"><a data-toggle="tab" href="#profile"><fmt:message key="public-profile.nav.profile" /></a></li>
                                 <shiro:authenticated>
                                     <% if ((boolean) request.getAttribute("you")) { %>
-                                <li role="presentation" class="active"><a data-toggle="tab" href="#other-friends"><fmt:message key="public-profile.nav.profile.other-friends" /></a></li>
+                                <li role="presentation"><a data-toggle="tab" href="#other-friends"><fmt:message key="public-profile.nav.profile.other-friends" /></a></li>
                                     <% } %>
                                 </shiro:authenticated>
                                 <% if (!(boolean) request.getAttribute("you")) { %>
