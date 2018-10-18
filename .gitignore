@@ -12,6 +12,9 @@ nb*
 # /src/main/java/com/parallax/server/blocklyprop/db/generated/*
 #
 
+# Json logging configuration
+logback-SAVE.xml
+
 #################
 ## NetBeans
 #################

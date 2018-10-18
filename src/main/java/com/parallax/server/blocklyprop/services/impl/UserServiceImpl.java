@@ -8,6 +8,7 @@ package com.parallax.server.blocklyprop.services.impl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
+
 import com.parallax.client.cloudsession.CloudSessionUserService;
 import com.parallax.client.cloudsession.exceptions.ServerException;
 import com.parallax.client.cloudsession.exceptions.UnknownUserIdException;
@@ -16,6 +17,7 @@ import com.parallax.server.blocklyprop.db.generated.tables.pojos.User;
 import com.parallax.server.blocklyprop.db.generated.tables.records.UserRecord;
 import com.parallax.server.blocklyprop.security.BlocklyPropSecurityUtils;
 import com.parallax.server.blocklyprop.services.UserService;
+
 import java.util.List;
 import org.apache.commons.configuration.Configuration;
 import org.slf4j.Logger;

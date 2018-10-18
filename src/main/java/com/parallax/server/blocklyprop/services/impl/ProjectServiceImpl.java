@@ -5,9 +5,7 @@
  */
 package com.parallax.server.blocklyprop.services.impl;
 
-import com.google.inject.Inject;
-import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
+
 import com.parallax.server.blocklyprop.TableOrder;
 import com.parallax.server.blocklyprop.TableSort;
 import com.parallax.server.blocklyprop.db.dao.ProjectDao;
@@ -16,15 +14,37 @@ import com.parallax.server.blocklyprop.db.generated.tables.records.ProjectRecord
 import com.parallax.server.blocklyprop.security.BlocklyPropSecurityUtils;
 import com.parallax.server.blocklyprop.services.ProjectService;
 import com.parallax.server.blocklyprop.services.ProjectSharingService;
+
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import com.google.inject.persist.Transactional;
+
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import org.apache.shiro.authz.UnauthorizedException;
+
+import org.apache.http.HttpHost;
+import org.elasticsearch.action.DocWriteResponse;
+import org.elasticsearch.action.index.IndexRequest;
+import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
+import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+
 
 /**
  *
  * @author Michel
  */
+
+
 @Singleton
 @Transactional
 public class ProjectServiceImpl implements ProjectService {
@@ -98,17 +118,26 @@ public class ProjectServiceImpl implements ProjectService {
             Long idProject, String name, String description, 
             String descriptionHtml, boolean privateProject, 
             boolean sharedProject, ProjectType type, String board) {
+
+        
+        ProjectRecord record;
         
         // Check if project is from the current user, if not, unset idProject and create new
         if (idProject != null) {
-            return projectDao.updateProject(
+            record = projectDao.updateProject(
                     idProject, name, description, descriptionHtml, 
                     privateProject, sharedProject);
         } else {
-            return projectDao.createProject(
+            record = projectDao.createProject(
                     name, description, descriptionHtml, type, board, 
                     privateProject, sharedProject);
         }
+        
+        if (record != null) {
+            UpdateProjectSearchRecord(record);
+        }
+        
+        return record;
     }
 
 
@@ -254,7 +283,15 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectRecord saveProjectCode(Long idProject, String code) {
-        return projectDao.updateProjectCode(idProject, code);
+
+        ProjectRecord record = projectDao.updateProjectCode(idProject, code);
+
+        // Update the project details on the search engine
+        if (record != null) {
+            UpdateProjectSearchRecord(record);
+        }
+        
+        return record;
     }
 
     @Override
@@ -262,4 +299,75 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDao.saveProjectCodeAs(idProject, code, newName, newBoard);
     }
 
+    
+    /**
+     * 
+     * @param record 
+     */
+    private void UpdateProjectSearchRecord(ProjectRecord record) {
+        
+        // This is the elasticsearch index name
+        String indexName = "project";
+        
+        // The default document type
+        String indexType = "_doc";
+        
+        LOG.info("Opening search connection");
+        RestHighLevelClient client = new RestHighLevelClient(
+            RestClient.builder(
+                new HttpHost("localhost", 9200, "http"),
+                new HttpHost("localhost", 9201, "http")));
+
+        try {
+            LOG.info("Building content object");
+            XContentBuilder builder = jsonBuilder()
+                    .startObject()
+                    .field("id", record.getId())
+                    .field("user_id", record.getIdUser())
+                    .field("private", record.getPrivate())
+                    .field("shared", record.getShared())
+                    .field("name", record.getName())
+                    .field("description", record.getDescription())
+                    .field("board", record.getBoard())
+                    .field("timestamp", new Date())
+                .endObject();
+            
+            LOG.info("Preparing index entry {}", record.getId());
+            IndexRequest request = new IndexRequest(
+                indexName,
+                indexType,
+                String.valueOf(record.getId()));
+            
+            request.source(builder);    
+
+            LOG.info("writing to the search engine");
+            IndexResponse indexResponse = client.index(request, RequestOptions.DEFAULT);
+
+            LOG.info("Returning from search engine update");
+            
+            if (indexResponse.getResult() == DocWriteResponse.Result.CREATED) {
+                LOG.info("Search item created.");
+            } else if (indexResponse.getResult() == DocWriteResponse.Result.UPDATED) {
+                LOG.info("Search item updated.");
+            }
+
+            LOG.info("Closing search connection.");
+            client.close();
+        }
+        catch (IOException ex) {
+            LOG.error("Search IO exception.");
+        }
+        catch (Exception ex) {
+            LOG.error("An unexpected exception has occurred. Message is: {}", ex.getMessage());
+        }
+        
+        LOG.info("Search connection is closed.");
+    }
+    
+    private void DeleteProjectSearchRecord(long idProject) {
+        // TODO: Delete the elasticsearch record for a deleted project.
+        LOG.info("Deleteing project {} from search index.", idProject);
+        
+    }
+    
 }
