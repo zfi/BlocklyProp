@@ -26,6 +26,7 @@ public class RestModule extends JerseyServletModule {
     @Override
     protected void configureServlets() {
         
+        // Bind the REST interfaces to their implementations
         bind(RestCompile.class);
         bind(RestUser.class);
         bind(RestProject.class);

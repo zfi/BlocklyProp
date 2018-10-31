@@ -5,30 +5,32 @@
  */
 package com.parallax.server.blocklyprop.config;
 
+import com.parallax.server.blocklyprop.SessionData;
+import com.parallax.server.blocklyprop.jsp.Properties;
+import com.parallax.server.blocklyprop.monitoring.Monitor;
+import com.parallax.server.blocklyprop.utils.HelpFileInitializer;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 
-import com.parallax.server.blocklyprop.SessionData;
-import com.parallax.server.blocklyprop.jsp.Properties;
-import com.parallax.server.blocklyprop.monitoring.Monitor;
-import com.parallax.server.blocklyprop.utils.HelpFileInitializer;
 import java.sql.Driver;
 import java.sql.DriverManager;
-import java.sql.SQLException;
 import java.util.Enumeration;
 import javax.servlet.ServletContextEvent;
+
 import org.apache.commons.configuration.Configuration;
 import org.apache.commons.configuration.ConfigurationException;
 import org.apache.commons.configuration.DefaultConfigurationBuilder;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-//import ch.qos.logback.classic.LoggerContext;
 
 
 /**
- *
+ * This class is loaded when the blockly servlet is started
+ * 
  * @author Michel
  */
 public class SetupConfig extends GuiceServletContextListener {

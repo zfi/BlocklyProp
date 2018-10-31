@@ -79,7 +79,7 @@
     </filter-mapping>
 
     <!-- Listeners -->
-    <!-- Guice -->
+    <!-- Guice - -->
     <listener>
         <listener-class>com.parallax.server.blocklyprop.config.SetupConfig</listener-class>
     </listener>

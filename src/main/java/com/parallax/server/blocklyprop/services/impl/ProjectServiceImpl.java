@@ -370,4 +370,53 @@ public class ProjectServiceImpl implements ProjectService {
         
     }
     
+    private void Search() {
+        String query = "GET project/_search\n" +
+            "{\n" +
+            "  \"query\": {\n" +
+            "    \"multi_match\": {\n" +
+            "      \"query\": \"sandbox\",\n" +
+            "      \"fields\": [\"name\",\"description\"]\n" +
+            "    }\n" +
+            "  },\n" +
+            "  \"size\": 2,\n" +
+            "  \"from\": 0,\n" +
+            "  \"_source\": {\n" +
+            "    \"excludes\": [\"user_id\",\"shared\"]\n" +
+            "  }, \n" +
+            "  \"highlight\": {\n" +
+            "    \"fields\": {\n" +
+            "      \"name\": {}\n" +
+            "    }\n" +
+            "  }\n" +
+            "}";
+        
+        String sortedQuery = "GET project/_search\n" +
+            "{\n" +
+            "  \"query\": {\n" +
+            "    \"multi_match\": {\n" +
+            "      \"query\": \"sandbox\",\n" +
+            "      \"fields\": [\"name\",\"description\"]\n" +
+            "    }\n" +
+            "  },\n" +
+            "  \"size\": 5,\n" +
+            "  \"from\": 19,\n" +
+            "  \"_source\": {\n" +
+            "    \"excludes\": [\"user_id\",\"shared\"]\n" +
+            "  }, \n" +
+            "  \"highlight\": {\n" +
+            "    \"fields\": {\n" +
+            "      \"name\": {}\n" +
+            "    }\n" +
+            "  },\n" +
+            "  \"sort\": [\n" +
+            "    {\n" +
+            "      \"board\": {\n" +
+            "        \"order\": \"asc\"\n" +
+            "      }\n" +
+            "    }\n" +
+            "  ]\n" +
+            "}";
+    }
+    
 }

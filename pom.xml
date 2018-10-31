@@ -224,6 +224,7 @@
     </profiles>
 
     <dependencies>
+
         <!-- Servlet and jsp libs provided by tomcat -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -254,8 +255,6 @@
         </dependency>
 
         <!-- Dependencies for logging -->
-        
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
@@ -280,27 +279,23 @@
             <version>1.2.3</version>
         </dependency>
         
-        <!-- ch.qos.logback.contrib.jackson.JacksonJsonFormatter -->
         <dependency>
             <groupId>ch.qos.logback.contrib</groupId>
             <artifactId>logback-jackson</artifactId>
             <version>0.1.5</version>
         </dependency>
 
-<!-- com.fasterxml.jackson.databind.ObjectMapper -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
             <version>2.9.5</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder -->
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>5.2</version>
         </dependency>
-
         <!-- END Logging Dependencies -->
 
         <!-- Dependencies for Guice -->
@@ -316,14 +311,13 @@
             <version>4.0</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-persist</artifactId>
             <version>4.0</version>
         </dependency>
-
         <!-- END Guice Dependencies -->
+
 
         <!-- Dependencies for JOOQ -->
         <dependency>
@@ -345,6 +339,7 @@
             <version>2.9.9</version>
         </dependency>
         <!-- END JOOQ Dependencies -->
+
 
         <!-- Dependencies for Shiro -->
         <dependency>
@@ -461,28 +456,13 @@
             <version>7.8.1</version>
         </dependency>
 
-        <!-- Lucene search engine -->
+        <!-- Elasticsearch -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
             <artifactId>lucene-core</artifactId>
             <version>${lucene.version}</version>
         </dependency>
-<!--        
 
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-analyzers-common</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.apache.lucene</groupId>
-            <artifactId>lucene-queryparser</artifactId>
-            <version>${lucene.version}</version>
-        </dependency>
--->
-
-        <!-- Elasticsearch -->
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
@@ -500,10 +480,10 @@
             <artifactId>elasticsearch-rest-high-level-client</artifactId>
             <version>6.4.2</version>
         </dependency>
+        <!-- End of Elasticsearch dependencies -->
         
         
-        
-        <!-- Oauth -->
+        <!-- OAuth -->
         <dependency>
             <groupId>com.github.scribejava</groupId>
             <artifactId>scribejava-apis</artifactId>
