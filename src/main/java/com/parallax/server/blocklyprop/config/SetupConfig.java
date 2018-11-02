@@ -47,18 +47,26 @@ public class SetupConfig extends GuiceServletContextListener {
 
     @Override
     protected Injector getInjector() {
+        
         readConfiguration();
 
         return Guice.createInjector(new AbstractModule() {
 
             @Override
             protected void configure() {
+                LOG.info("Binding configuration class to instance of 'configuration'.");
                 bind(Configuration.class).toInstance(configuration);
 
+                LOG.info("Binding SessionData class");
                 bind(SessionData.class);
+                
+                LOG.info("Binding Properties as an EagerSingleton");
                 bind(Properties.class).asEagerSingleton();
 
+                LOG.info("Binding HelpFileInitializer class as an EagerSingleton");
                 bind(HelpFileInitializer.class).asEagerSingleton();
+                
+                LOG.info("Binding Monitor claas as an EagerSingleton");
                 bind(Monitor.class).asEagerSingleton();
 
                 // Configure the backend data store

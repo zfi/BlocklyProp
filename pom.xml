@@ -21,6 +21,8 @@
         <metrics-version>3.1.0</metrics-version>
         <jersey.version>1.19</jersey.version>
         <lucene.version>7.4.0</lucene.version>
+        <logback.version>1.2.1</logback.version>
+        <guice.version>3.0</guice.version>
     </properties>
     
     <repositories>
@@ -225,6 +227,19 @@
 
     <dependencies>
 
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.plugins/maven-dependency-plugin -->
+<dependency>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-dependency-plugin</artifactId>
+    <version>3.1.1</version>
+</dependency>
+<!-- https://mvnrepository.com/artifact/org.apache.maven.shared/maven-dependency-tree -->
+<dependency>
+    <groupId>org.apache.maven.shared</groupId>
+    <artifactId>maven-dependency-tree</artifactId>
+    <version>3.0.1</version>
+</dependency>
+
         <!-- Servlet and jsp libs provided by tomcat -->
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -255,30 +270,32 @@
         </dependency>
 
         <!-- Dependencies for logging -->
+<!--
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
             <version>2.11.1</version>
         </dependency>
+-->
 
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>1.7.25</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>1.2.3</version>
+            <version>${logback.version}</version>
         </dependency>
 
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
-            <version>1.2.3</version>
+            <version>${logback.version}</version>
         </dependency>
         
+<!--
         <dependency>
             <groupId>ch.qos.logback.contrib</groupId>
             <artifactId>logback-jackson</artifactId>
@@ -296,25 +313,26 @@
             <artifactId>logstash-logback-encoder</artifactId>
             <version>5.2</version>
         </dependency>
+-->
         <!-- END Logging Dependencies -->
 
         <!-- Dependencies for Guice -->
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
-            <version>4.0</version>
+            <version>${guice.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-servlet</artifactId>
-            <version>4.0</version>
+            <version>${guice.version}</version>
         </dependency>
 
         <dependency>
             <groupId>com.google.inject.extensions</groupId>
             <artifactId>guice-persist</artifactId>
-            <version>4.0</version>
+            <version>${guice.version}</version>
         </dependency>
         <!-- END Guice Dependencies -->
 
@@ -329,7 +347,7 @@
         <dependency>
             <groupId>com.adamlewis</groupId>
             <artifactId>guice-persist-jooq</artifactId>
-            <version>0.1.2</version>
+            <version>1.0.0</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/joda-time/joda-time -->
@@ -444,18 +462,32 @@
         <!-- END Rest API -->
 
         <!-- Raven / Sentry API -->
+<!--
         <dependency>
             <groupId>com.getsentry.raven</groupId>
             <artifactId>raven</artifactId>
             <version>7.8.1</version>
         </dependency>
+-->
+        <!-- https://mvnrepository.com/artifact/io.sentry/sentry -->
+<dependency>
+    <groupId>io.sentry</groupId>
+    <artifactId>sentry</artifactId>
+    <version>1.7.13</version>
+</dependency>
 
+<!--
         <dependency>
             <groupId>com.getsentry.raven</groupId>
             <artifactId>raven-logback</artifactId>
-            <version>7.8.1</version>
+            <version>7.8.0</version>
         </dependency>
-
+-->
+<dependency>
+    <groupId>io.sentry</groupId>
+    <artifactId>sentry-logback</artifactId>
+    <version>1.7.10</version>
+</dependency>
         <!-- Elasticsearch -->
         <dependency>
             <groupId>org.apache.lucene</groupId>
@@ -513,7 +545,7 @@
         <dependency>
             <groupId>io.dropwizard.metrics</groupId>
             <artifactId>metrics-logback</artifactId>
-            <version>3.1.2</version>
+            <version>${metrics-version}</version>
         </dependency>
 
         <dependency>

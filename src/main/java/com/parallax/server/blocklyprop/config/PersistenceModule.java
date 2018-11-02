@@ -5,6 +5,7 @@
  */
 package com.parallax.server.blocklyprop.config;
 
+
 import com.adamlewis.guice.persist.jooq.JooqPersistModule;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
@@ -15,8 +16,10 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp2.PoolingDataSource;
 import org.jooq.SQLDialect;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
+//import java.util.logging.Level;
+//import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**
@@ -24,6 +27,11 @@ import java.util.logging.Logger;
  * @author Michel
  */
 public class PersistenceModule extends AbstractModule {
+
+    /**
+     * Application logging connector
+     */
+    private final Logger LOG = LoggerFactory.getLogger(PersistenceModule.class);
 
     private final Configuration configuration;
 
@@ -33,8 +41,14 @@ public class PersistenceModule extends AbstractModule {
 
     @Override
     protected void configure() {
+        try {
         install(new JooqPersistModule());
+//        install(new JooqPersistModule());
         bind(DataSource.class).to(PoolingDataSource.class).asEagerSingleton();
+        }
+        catch (Exception ex) {
+            LOG.error("Trapped an unhandled exception while binding to database connection.");
+        }
     }
 
     @Provides
@@ -44,7 +58,9 @@ public class PersistenceModule extends AbstractModule {
         try {
             ds.getConnection();
         } catch (SQLException ex) {
-            Logger.getLogger(PersistenceModule.class.getName()).log(Level.SEVERE, null, ex);
+            LOG.error("SQL exception detected while contacting database.");
+            LOG.error("Message is: {}", ex.getMessage());
+//            Logger.getLogger(PersistenceModule.class.getName()).log(Level.SEVERE, null, ex);
         }
         return ds;
     }
