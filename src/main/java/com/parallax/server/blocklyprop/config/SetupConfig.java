@@ -69,12 +69,24 @@ public class SetupConfig extends GuiceServletContextListener {
                 LOG.info("Binding Monitor claas as an EagerSingleton");
                 bind(Monitor.class).asEagerSingleton();
 
-                // Configure the backend data store
-                install(new PersistenceModule(configuration));
+                // Configure the backend data 
+                if (configuration != null) {
+                    LOG.info("Installing persistence module for configuration");
+                    LOG.info("Configuration dbUserName: {}", configuration.getString("database.username"));
+
+                    install(new PersistenceModule(configuration));
+                    
+                    LOG.info("Persistence module installed");
+                }
 
                 // Bind data classes with their implementations. 
+                LOG.info("Installing new DAO module");
                 install(new DaoModule());
+                
+                LOG.info("Installing new Service module");
                 install(new ServiceModule());
+                
+                
                 install(new ServletsModule());
                 install(new RestModule());
             }
@@ -94,15 +106,29 @@ public class SetupConfig extends GuiceServletContextListener {
     */
     private void readConfiguration() {
         try {
-            LOG.info(
-                    "Looking for blocklyprop.properties in: {}", 
+            LOG.info("Looking for blocklyprop.properties in: {}", 
                     System.getProperty("user.home"));
             
             DefaultConfigurationBuilder configurationBuilder 
-                    = new DefaultConfigurationBuilder(getClass()
-                            .getResource("/config.xml"));
+                    = new DefaultConfigurationBuilder(
+                            getClass().getResource("/config.xml"));
+            
+            if (configurationBuilder == null) {
+                LOG.error("Unable to get root configuration");
+            }
+            
+            LOG.info("Checking for configuration");
             
             configuration = configurationBuilder.getConfiguration();
+            
+            LOG.info("We might have a configuration");
+            
+            if (configuration == null) {
+                LOG.error("Unable to load the application configuration");
+            }
+            else {
+                LOG.info("We do have a configuration.");
+            }
         } catch (ConfigurationException ce) {
             LOG.error("{}", ce.getMessage());
         } catch (Throwable t) {

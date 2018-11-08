@@ -64,7 +64,7 @@ Valid logging levels: TRACE, DEBUG, INFO, WARN and ERROR
     </logger>
     --> 
     
-    <root level="info">
+    <root level="debug">
         <appender-ref ref="RollingFile" />
     </root>
 </configuration>

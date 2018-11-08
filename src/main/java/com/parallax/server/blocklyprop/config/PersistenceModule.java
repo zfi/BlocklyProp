@@ -7,6 +7,7 @@ package com.parallax.server.blocklyprop.config;
 
 
 import com.adamlewis.guice.persist.jooq.JooqPersistModule;
+
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import com.parallax.server.blocklyprop.db.utils.DataSourceSetup;
@@ -16,8 +17,6 @@ import org.apache.commons.configuration.Configuration;
 import org.apache.commons.dbcp2.PoolingDataSource;
 import org.jooq.SQLDialect;
 
-//import java.util.logging.Level;
-//import java.util.logging.Logger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,24 +32,53 @@ public class PersistenceModule extends AbstractModule {
      */
     private final Logger LOG = LoggerFactory.getLogger(PersistenceModule.class);
 
+    
+    /**
+     * Application configuration settings
+     */
     private final Configuration configuration;
-
+    
+    
+    /**
+     * Class constructor.
+     * 
+     * Set the local copy of the application configuration
+     * 
+     * @param configuration 
+     */
     PersistenceModule(Configuration configuration) {
+        LOG.info("Init persistence module");
+        
         this.configuration = configuration;
+        
+        LOG.info("Configuration URL: {}", configuration.getString("cloudsession.baseurl"));
     }
 
+    
+    /**
+     * Configure the injector
+     */
     @Override
     protected void configure() {
-        try {
-        install(new JooqPersistModule());
-//        install(new JooqPersistModule());
-        bind(DataSource.class).to(PoolingDataSource.class).asEagerSingleton();
-        }
-        catch (Exception ex) {
-            LOG.error("Trapped an unhandled exception while binding to database connection.");
-        }
+            LOG.info("Installing new JooQPersist module");
+            install(new JooqPersistModule());
+            
+            // Bind the DataSource interface to the PoolingDataSource implementation,
+            // which is provided below.
+            LOG.info("Binding Data source to Pooling Data source as EagerSingleton");
+            bind(DataSource.class).to(PoolingDataSource.class).asEagerSingleton();
     }
 
+    
+    /**
+     * Construct a pooling data source.
+     * 
+     * This is somewhat equivalent to a factory method
+     * 
+     * @return an instance of a PoolingDataSource
+     * 
+     * @throws ClassNotFoundException 
+     */
     @Provides
     PoolingDataSource dataSource() throws ClassNotFoundException {
 

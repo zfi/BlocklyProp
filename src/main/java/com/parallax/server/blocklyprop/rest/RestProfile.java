@@ -49,8 +49,12 @@ public class RestProfile {
     @Inject
     public void setConfiguration(Configuration configuration) {
         this.configuration = configuration;
-        cloudSessionLocalUserService = new CloudSessionLocalUserService(configuration.getString("cloudsession.server"), configuration.getString("cloudsession.baseurl"));
-        cloudSessionUserService = new CloudSessionUserService(configuration.getString("cloudsession.baseurl"));
+        cloudSessionLocalUserService = new CloudSessionLocalUserService(
+                configuration.getString("cloudsession.server"), 
+                configuration.getString("cloudsession.baseurl"));
+        
+        cloudSessionUserService = new CloudSessionUserService(
+                configuration.getString("cloudsession.baseurl"));
     }
 
     @POST
